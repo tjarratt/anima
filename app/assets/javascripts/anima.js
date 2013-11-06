@@ -25,21 +25,19 @@ function sampleAudio() {
 
   sampler.smoothingTimeConstant = 0.75;
   sampler.getByteFrequencyData(buffer);
-  console.log(buffer);
 
   processing.size(window.innerWidth, window.innerHeight);
   processing.background(89, 125, 225);
   processing.stroke(230, 230, 230);
 
-  processing.line(0, 300, window.innerWidth, 300);
-
   var previousX = 0;
   var previousY = 0;
 
   for(var i = 0; i < buffer.length; ++i) {
-    var x = window.innerWidth / buffer.length * i;
-    processing.line(previousX, previousY, x, 300 + buffer[i]);
-  }
+    var x = window.innerWidth * 1.0 / buffer.length * i;
+    processing.line(previousX, previousY, x, 300 - buffer[i]);
 
-  processing.line(previousX, previousY, window.innerWidth, 300);
+    previousX = x;
+    previousY = 300 - buffer[i];
+  }
 }
