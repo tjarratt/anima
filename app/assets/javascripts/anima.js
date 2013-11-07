@@ -6,38 +6,63 @@ var processing;
 
 window.onload = function() {
   navigator.webkitGetUserMedia({audio: true}, function(localMediaStream) {
-
     microphone = context.createMediaStreamSource(localMediaStream);
     sampler = context.createAnalyser();
     sampler.fftSize = 1024;
     microphone.connect(sampler);
-
-    var canvas = document.getElementsByTagName('canvas')[0];
-    new Processing(canvas, function(p) {
-      processing = p;
-      window.setInterval(sampleAudio, 15);
-    });
   });
+
+  var canvas = document.getElementsByTagName('canvas')[0];
+  new Processing(canvas, function(p) {
+    processing = p;
+    processing.size(window.innerWidth, window.innerHeight);
+  });
+
+  window.setInterval(sampleAudio, 150);
 };
 
 function sampleAudio() {
-  var buffer = new Uint8Array(1024);
-
-  sampler.smoothingTimeConstant = 0.75;
-  sampler.getByteFrequencyData(buffer);
-
-  processing.size(window.innerWidth, window.innerHeight);
   processing.background(89, 125, 225);
   processing.stroke(230, 230, 230);
+
+  if (!sampler) {
+    return sampleFakeAudio();
+  }
+
+  var buffer = new Uint8Array(512);
+  sampler.smoothingTimeConstant = 0.75;
+  sampler.getByteFrequencyData(buffer);
 
   var previousX = 0;
   var previousY = 0;
 
   for(var i = 0; i < buffer.length; ++i) {
     var x = window.innerWidth * 1.0 / buffer.length * i;
-    processing.line(previousX, previousY, x, 300 - buffer[i]);
+    var y = 300 - buffer[i];
+    processing.line(previousX, previousY, x, y);
 
     previousX = x;
-    previousY = 300 - buffer[i];
+    previousY = y;
+  }
+}
+
+var theta = 0;
+var floatValues = new Uint8Array(window.innerWidth);
+function sampleFakeAudio() {
+  theta += 0.2;
+
+  var x = theta;
+  for (var i = 0; i < floatValues.length; ++i) {
+    floatValues[i] = Math.sin(x) * 100;
+    x += 2 * Math.PI / 2;
+  }
+
+  var prevX = 0;
+  var prevY = floatValues[0];
+  for(var j = 0; j < floatValues.length; ++j) {
+    processing.line(prevX, prevY, prevX + j, floatValues[j]);
+
+    prevX = prevX + j;
+    prevY = floatValues[j];
   }
 }
