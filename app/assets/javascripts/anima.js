@@ -3,6 +3,7 @@
 var microphone, sampler;
 var context = new window.webkitAudioContext();
 var processing;
+var interval;
 
 window.onload = function() {
   navigator.webkitGetUserMedia({audio: true}, function(localMediaStream) {
@@ -10,6 +11,9 @@ window.onload = function() {
     sampler = context.createAnalyser();
     sampler.fftSize = 1024;
     microphone.connect(sampler);
+
+    window.clearInterval(sampleAudio);
+    interval = window.setInterval(sampleAudio, 15);
   });
 
   var canvas = document.getElementsByTagName('canvas')[0];
@@ -18,7 +22,7 @@ window.onload = function() {
     processing.size(window.innerWidth, window.innerHeight);
   });
 
-  window.setInterval(sampleAudio, 150);
+  interval = window.setInterval(sampleAudio, 150);
 };
 
 function sampleAudio() {
