@@ -22,7 +22,7 @@ window.onload = function() {
     processing.size(window.innerWidth, window.innerHeight);
   });
 
-  interval = window.setInterval(sampleAudio, 150);
+  interval = window.setInterval(sampleAudio, 100);
 };
 
 function sampleAudio() {
