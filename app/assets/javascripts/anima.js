@@ -62,12 +62,15 @@ function sampleFakeAudio() {
     floatValues[i] = 100 + Math.sin(x + i * 0.1) * 100;
   }
 
-  var prevX = 0;
-  var prevY = floatValues[0];
-  for(var j = 0; j < floatValues.length; ++j) {
-    processing.line(prevX, 50 + prevY, prevX + j, 50 + floatValues[j]);
+  for(var lineCount = 0; lineCount < 5; ++lineCount) {
+    var prevX = 0;
+    var prevY = floatValues[0] - 50 * lineCount;
 
-    prevX = prevX + j;
-    prevY = floatValues[j];
+    for(var j = 0; j < floatValues.length; ++j) {
+      processing.line(prevX, 100 + prevY - 50 * lineCount, prevX + j, 100 + floatValues[j] - 50 * lineCount);
+
+      prevX = prevX + j;
+      prevY = floatValues[j];
+    }
   }
 }
