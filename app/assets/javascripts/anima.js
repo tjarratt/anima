@@ -37,16 +37,18 @@ function sampleAudio() {
   sampler.smoothingTimeConstant = 0.75;
   sampler.getByteFrequencyData(buffer);
 
-  var previousX = 0;
-  var previousY = 0;
+  for(var lineCount = 0; lineCount < 5; ++lineCount) {
+    var previousX = 0;
+    var previousY = 0 - 50 * lineCount;
 
-  for(var i = 0; i < buffer.length; ++i) {
-    var x = window.innerWidth * 1.0 / buffer.length * i;
-    var y = 300 - buffer[i];
-    processing.line(previousX, previousY, x, y);
+    for(var i = 0; i < buffer.length; ++i) {
+      var x = window.innerWidth * 1.0 / buffer.length * i;
+      var y = 300 - 50 * lineCount - buffer[i];
+      processing.line(previousX, previousY, x, y);
 
-    previousX = x;
-    previousY = y;
+      previousX = x;
+      previousY = y;
+    }
   }
 }
 
