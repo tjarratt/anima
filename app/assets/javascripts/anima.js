@@ -57,14 +57,13 @@ function sampleFakeAudio() {
 
   var x = theta;
   for (var i = 0; i < floatValues.length; ++i) {
-    floatValues[i] = Math.sin(x) * 100;
-    x += 2 * Math.PI / 2;
+    floatValues[i] = 100 + Math.sin(x + i * 0.1) * 100;
   }
 
   var prevX = 0;
   var prevY = floatValues[0];
   for(var j = 0; j < floatValues.length; ++j) {
-    processing.line(prevX, prevY, prevX + j, floatValues[j]);
+    processing.line(prevX, 50 + prevY, prevX + j, 50 + floatValues[j]);
 
     prevX = prevX + j;
     prevY = floatValues[j];
