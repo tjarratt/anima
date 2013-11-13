@@ -3,17 +3,19 @@
 var microphone, sampler;
 var context = new window.webkitAudioContext();
 var processing;
-var interval;
+var id;
 
 window.onload = function() {
+  var repeater;
   navigator.webkitGetUserMedia({audio: true}, function(localMediaStream) {
     microphone = context.createMediaStreamSource(localMediaStream);
     sampler = context.createAnalyser();
     sampler.fftSize = 1024;
     microphone.connect(sampler);
 
-    window.clearInterval(sampleAudio);
-    interval = window.setInterval(sampleAudio, 15);
+    window.clearTimeout(id);
+    repeater = function () { sampleAudio(); id = setTimeout(repeater, 15); };
+    repeater();
   });
 
   var canvas = document.getElementsByTagName('canvas')[0];
@@ -22,7 +24,8 @@ window.onload = function() {
     processing.size(window.innerWidth, window.innerHeight);
   });
 
-  interval = window.setInterval(sampleAudio, 100);
+  repeater = function () { sampleAudio(); id = setTimeout(repeater, 100); };
+  repeater();
 };
 
 function sampleAudio() {
