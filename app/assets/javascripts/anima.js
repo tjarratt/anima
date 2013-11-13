@@ -3,10 +3,10 @@
 var microphone, sampler;
 var context = new window.webkitAudioContext();
 var processing;
-var id;
 
 window.onload = function() {
-  var repeater;
+  var repeater, id;
+
   navigator.webkitGetUserMedia({audio: true}, function(localMediaStream) {
     microphone = context.createMediaStreamSource(localMediaStream);
     sampler = context.createAnalyser();
@@ -24,12 +24,27 @@ window.onload = function() {
     processing.size(window.innerWidth, window.innerHeight);
   });
 
-  repeater = function () { sampleAudio(); id = setTimeout(repeater, 100); };
+  repeater = function() { sampleAudio(); id = setTimeout(repeater, 100); };
   repeater();
+
+  (function daytimeRepeater() { updateBackground(); setTimeout(daytimeRepeater, 1000); })();
 };
 
+function updateBackground() {
+  var date = new Date();
+
+  $('#topGradientTransition,#bottomGradient').removeClass();
+  var currentHour = date.getHours();
+  var nextHour = (currentHour + 1) % 24;
+
+  var percentage = (date.getSeconds() * 60 + date.getMinutes()) / 3600;
+  $('#topGradientTransition').addClass('hour-' + currentHour);
+  $('#topGradient').css('opacity', 1 - percentage);
+  $('#bottomGradient').addClass('hour-' + nextHour);
+}
+
 function sampleAudio() {
-  processing.background(89, 125, 225);
+  processing.background(0, 0, 0, 0);
   processing.stroke(230, 230, 230);
 
   if (!sampler) {

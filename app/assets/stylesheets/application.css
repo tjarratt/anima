@@ -11,3 +11,102 @@
  *= require_self
  *= require_tree .
  */
+div, canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.hour-0, .hour-1 {
+  background-image: -webkit-linear-gradient(#002658, #001322);
+}
+
+.hour-2 {
+  background-image: -webkit-linear-gradient(#003B71, #001322);
+}
+
+.hour-3 {
+  background-image: -webkit-linear-gradient(#004571, #00192B);
+}
+
+.hour-4 {
+  background-image: -webkit-linear-gradient(#02618F, #011E33);
+}
+
+.hour-5 {
+  background-image: -webkit-linear-gradient(#004571, #00192B);
+}
+
+.hour-6 {
+  background-image: -webkit-linear-gradient(#0B749E, #042D46);
+}
+
+.hour-7 {
+  background-image: -webkit-linear-gradient(#1AA2BF, #09516D);
+}
+
+.hour-8 {
+  background-image: -webkit-linear-gradient(#77D4CC, #1887A5);
+}
+
+.hour-9 {
+  background-image: -webkit-linear-gradient(#EFEDBE, #64D0CF);
+}
+
+.hour-10 {
+  background-image: -webkit-linear-gradient(#FEDF5E, #A4DEC7);
+}
+
+.hour-11 {
+  background-image: -webkit-linear-gradient(#FCC15A, #E9EB96);
+}
+
+.hour-12 {
+  background-image: -webkit-linear-gradient(#FEAC73, #FFE26E);
+}
+
+.hour-13 {
+  background-image: -webkit-linear-gradient(#FCA45F, #FFE26E);
+}
+
+.hour-14 {
+  background-image: -webkit-linear-gradient(#FC9C5D, #FFE16E);
+}
+
+.hour-15 {
+  background-image: -webkit-linear-gradient(#F0834D, #FFD16A);
+}
+
+.hour-16 {
+  background-image: -webkit-linear-gradient(#EF6B7F, #F8A65B);
+}
+
+.hour-17 {
+  background-image: -webkit-linear-gradient(#C95C91, #F3886D);
+}
+
+.hour-18 {
+  background-image: -webkit-linear-gradient(#5A3182, #D0638B);
+}
+
+.hour-19 {
+  background-image: -webkit-linear-gradient(#352177, #703A83);
+}
+
+.hour-20 {
+  background-image: -webkit-linear-gradient(#261C6A, #44277A);
+}
+
+.hour-21 {
+  background-image: -webkit-linear-gradient(#182B60, #362573);
+}
+
+.hour-22 {
+  background-image: -webkit-linear-gradient(#030E3B, #223371);
+}
+
+.hour-23 {
+  background-image: -webkit-linear-gradient(#030E3B, #002658);
+}
