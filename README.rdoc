@@ -1,28 +1,22 @@
-== README
+== Anima
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Anima is an experimental, minimalistic art project that combines data from microphones and the time of day to visualize your office's environment.
 
-Things you may want to cover:
+The goal of anima is to
 
-* Ruby version
+* inspire reflection during the day
+* provide a beautiful art piece to display in our office
+* encourage more pivots to create art to share with their peers
+* be a fun and engaging piece that you can interact with
 
-* System dependencies
+We're very open to trying new things, so drop us a line, or feel free to fork
+and build something yourself!
 
-* Configuration
+== Getting started
 
-* Database creation
+You should be able to get started by forking this repository and running these commands
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+ git fork https://github.com/tjarratt/anima.git
+ cd anima
+ bundle install
+ rails s
