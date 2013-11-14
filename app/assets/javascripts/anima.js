@@ -34,13 +34,13 @@ function updateBackground() {
   var date = new Date();
 
   $('#topGradientTransition,#bottomGradient').removeClass();
-  var currentHour = date.getHours();
-  var nextHour = (currentHour + 1) % 24;
+  var current_hour = date.getHours();
+  var next_hour = (current_hour + 1) % 24;
 
   var percentage = (date.getMinutes() * 60 + date.getSeconds()) / 3600;
-  $('#topGradientTransition').addClass('hour-' + currentHour);
+  $('#topGradientTransition').addClass('hour-' + current_hour);
   $('#topGradient').css('opacity', 1 - percentage);
-  $('#bottomGradient').addClass('hour-' + nextHour);
+  $('#bottomGradient').addClass('hour-' + next_hour);
 }
 
 function sampleAudio() {
@@ -57,17 +57,17 @@ function sampleAudio() {
 
   var waves_frame_origin = window.innerHeight / 2 + 100;
 
-  for(var lineCount = 0; lineCount < 5; ++lineCount) {
-    var previousX = 0;
-    var previousY = 0 - 50 * lineCount;
+  for(var line_count = 0; line_count < 5; ++line_count) {
+    var previous_x = 0;
+    var previous_y = 0 - 50 * line_count;
 
     for(var i = 0; i < buffer.length; ++i) {
       var x = window.innerWidth * 1.0 / buffer.length * i;
       var y = buffer[i];
-      processing.line(previousX, waves_frame_origin - previousY - 50 * lineCount, x, waves_frame_origin - y - 50 * lineCount);
+      processing.line(previous_x, waves_frame_origin - previous_y - 50 * line_count, x, waves_frame_origin - y - 50 * line_count);
 
-      previousX = x;
-      previousY = y;
+      previous_x = x;
+      previous_y = y;
     }
   }
 }
@@ -84,15 +84,16 @@ function sampleFakeAudio() {
     float_values[i] = 100 + Math.sin(x + i * 0.1) * 100;
   }
 
-  for(var lineCount = 0; lineCount < 5; ++lineCount) {
-    var prevX = 0;
-    var prevY = float_values[0] - 50 * lineCount;
+  for(var line_count = 0; line_count < 5; ++line_count) {
+    var previous_x = 0;
+    var previous_y = float_values[0] - 50 * line_count;
 
     for(var j = 0; j < float_values.length; ++j) {
-      processing.line(prevX, waves_frame_origin + prevY - 50 * lineCount, prevX + j, waves_frame_origin + float_values[j] - 50 * lineCount);
+      processing.line(previous_x, waves_frame_origin + previous_y - 50 * line_count, previous_x + j, waves_frame_origin + float_values[j] - 50 * line_count);
 
-      prevX = prevX + j;
-      prevY = float_values[j];
+      previous_x = previous_x + j;
+      previous_y
+ = float_values[j];
     }
   }
 }
