@@ -55,14 +55,16 @@ function sampleAudio() {
   sampler.smoothingTimeConstant = 0.75;
   sampler.getByteFrequencyData(buffer);
 
+  var waves_frame_origin = window.innerHeight / 2 + 100;
+
   for(var lineCount = 0; lineCount < 5; ++lineCount) {
     var previousX = 0;
     var previousY = 0 - 50 * lineCount;
 
     for(var i = 0; i < buffer.length; ++i) {
       var x = window.innerWidth * 1.0 / buffer.length * i;
-      var y = 300 - 50 * lineCount - buffer[i];
-      processing.line(previousX, previousY, x, y);
+      var y = buffer[i];
+      processing.line(previousX, waves_frame_origin - previousY - 50 * lineCount, x, waves_frame_origin - y - 50 * lineCount);
 
       previousX = x;
       previousY = y;
@@ -75,7 +77,7 @@ var float_values = new Uint8Array(window.innerWidth);
 function sampleFakeAudio() {
   theta += 0.2;
 
-  var waves_frame_origin = window.innerHeight / 2;
+  var waves_frame_origin = window.innerHeight / 2 + 100;
 
   var x = theta;
   for (var i = 0; i < float_values.length; ++i) {
