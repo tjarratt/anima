@@ -2,6 +2,8 @@
 
 Anima is an experimental, minimalistic art project that combines data from microphones and the time of day to visualize your office's environment.
 
+Check out the current version on heroku: http://anima-visualizations.herokuapp.com (requires Chrome)
+
 The goal of anima is to
 
 * inspire reflection during the day
