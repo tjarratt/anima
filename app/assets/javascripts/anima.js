@@ -71,24 +71,26 @@ function sampleAudio() {
 }
 
 var theta = 0;
-var floatValues = new Uint8Array(window.innerWidth);
+var float_values = new Uint8Array(window.innerWidth);
 function sampleFakeAudio() {
   theta += 0.2;
 
+  var waves_frame_origin = window.innerHeight / 2;
+
   var x = theta;
-  for (var i = 0; i < floatValues.length; ++i) {
-    floatValues[i] = 100 + Math.sin(x + i * 0.1) * 100;
+  for (var i = 0; i < float_values.length; ++i) {
+    float_values[i] = 100 + Math.sin(x + i * 0.1) * 100;
   }
 
   for(var lineCount = 0; lineCount < 5; ++lineCount) {
     var prevX = 0;
-    var prevY = floatValues[0] - 50 * lineCount;
+    var prevY = float_values[0] - 50 * lineCount;
 
-    for(var j = 0; j < floatValues.length; ++j) {
-      processing.line(prevX, 100 + prevY - 50 * lineCount, prevX + j, 100 + floatValues[j] - 50 * lineCount);
+    for(var j = 0; j < float_values.length; ++j) {
+      processing.line(prevX, waves_frame_origin + prevY - 50 * lineCount, prevX + j, waves_frame_origin + float_values[j] - 50 * lineCount);
 
       prevX = prevX + j;
-      prevY = floatValues[j];
+      prevY = float_values[j];
     }
   }
 }
