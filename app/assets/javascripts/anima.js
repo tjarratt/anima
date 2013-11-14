@@ -37,7 +37,7 @@ function updateBackground() {
   var currentHour = date.getHours();
   var nextHour = (currentHour + 1) % 24;
 
-  var percentage = (date.getSeconds() * 60 + date.getMinutes()) / 3600;
+  var percentage = (date.getMinutes() * 60 + date.getSeconds()) / 3600;
   $('#topGradientTransition').addClass('hour-' + currentHour);
   $('#topGradient').css('opacity', 1 - percentage);
   $('#bottomGradient').addClass('hour-' + nextHour);
