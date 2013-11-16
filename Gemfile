@@ -14,6 +14,7 @@ group :doc do
 end
 
 group :development do
+  gem 'cf'
   gem 'sqlite3'
 end
 
