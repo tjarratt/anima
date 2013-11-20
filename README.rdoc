@@ -18,7 +18,7 @@ and build something yourself!
 
 You should be able to get started by forking this repository and running these commands
 
- git fork https://github.com/tjarratt/anima.git
+ git clone https://github.com/tjarratt/anima.git
  cd anima
  bundle install
  rails s
