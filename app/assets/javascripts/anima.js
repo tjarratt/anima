@@ -24,7 +24,7 @@ window.onload = function() {
     processing.size(window.innerWidth, window.innerHeight);
   });
 
-  repeater = function() { sampleAudio(); id = setTimeout(repeater, 100); };
+  repeater = function() { sampleFakeAudio(); id = setTimeout(repeater, 100); };
   repeater();
 
   (function daytimeRepeater() { updateBackground(); setTimeout(daytimeRepeater, 1000); })();
@@ -59,17 +59,16 @@ function strokeColorForHour(hour) {
   }
 }
 
-function sampleAudio() {
+function prepareToDraw() {
   var date = last_date;
   var hour = date.getHours();
   var color = strokeColorForHour(hour);
   processing.background(0, 0, 0, 0);
   processing.stroke.apply(processing, color);
+}
 
-  if (!sampler) {
-    return sampleFakeAudio();
-  }
-
+function sampleAudio() {
+  prepareToDraw();
   var buffer = new Uint8Array(128);
   sampler.smoothingTimeConstant = 0.95;
   sampler.getByteFrequencyData(buffer);
@@ -91,6 +90,7 @@ function sampleAudio() {
 var theta = 0;
 var float_values = new Uint8Array(window.innerWidth);
 function sampleFakeAudio() {
+  prepareToDraw();
   theta += 0.2;
 
   var waves_frame_origin = window.innerHeight / 2;
