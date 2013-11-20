@@ -70,24 +70,21 @@ function sampleAudio() {
     return sampleFakeAudio();
   }
 
-  var buffer = new Uint8Array(512);
-  sampler.smoothingTimeConstant = 0.75;
+  var buffer = new Uint8Array(128);
+  sampler.smoothingTimeConstant = 0.95;
   sampler.getByteFrequencyData(buffer);
 
   var waves_frame_origin = window.innerHeight / 2 + 100;
+  var previous_x = 0;
+  var previous_y = 0;
 
-  for(var line_count = 0; line_count < 5; ++line_count) {
-    var previous_x = 0;
-    var previous_y = 0 - 50 * line_count;
+  for(var i = 0; i < buffer.length; ++i) {
+    var x = window.innerWidth * 1.0 / buffer.length * i;
+    var y = buffer[i] * 1.5;
+    processing.line(previous_x, waves_frame_origin - previous_y - 50, x, waves_frame_origin - y - 50);
 
-    for(var i = 0; i < buffer.length; ++i) {
-      var x = window.innerWidth * 1.0 / buffer.length * i;
-      var y = buffer[i];
-      processing.line(previous_x, waves_frame_origin - previous_y - 50 * line_count, x, waves_frame_origin - y - 50 * line_count);
-
-      previous_x = x;
-      previous_y = y;
-    }
+    previous_x = x;
+    previous_y = y;
   }
 }
 
@@ -103,16 +100,13 @@ function sampleFakeAudio() {
     float_values[i] = 100 + Math.sin(x + i * 0.1) * 100;
   }
 
-  for(var line_count = 0; line_count < 5; ++line_count) {
-    var previous_x = 0;
-    var previous_y = float_values[0] - 50 * line_count;
+  var previous_x = 0;
+  var previous_y = float_values[0] - 50;
 
-    for(var j = 0; j < float_values.length; ++j) {
-      processing.line(previous_x, waves_frame_origin + previous_y - 50 * line_count, previous_x + j, waves_frame_origin + float_values[j] - 50 * line_count);
+  for(var j = 0; j < float_values.length; ++j) {
+    processing.line(previous_x, waves_frame_origin + previous_y - 50, previous_x + j, waves_frame_origin + float_values[j] - 50);
 
-      previous_x = previous_x + j;
-      previous_y
- = float_values[j];
-    }
+    previous_x = previous_x + j;
+    previous_y = float_values[j];
   }
 }
