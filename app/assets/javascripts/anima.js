@@ -10,7 +10,7 @@ window.onload = function() {
   navigator.webkitGetUserMedia({audio: true}, function(localMediaStream) {
     microphone = context.createMediaStreamSource(localMediaStream);
     sampler = context.createAnalyser();
-    sampler.fftSize = 1024;
+    sampler.fftSize = 2048;
     microphone.connect(sampler);
 
     window.clearTimeout(id);
@@ -64,25 +64,26 @@ function sampleAudio() {
   var hour = date.getHours();
   var color = strokeColorForHour(hour);
   processing.background(0, 0, 0, 0);
-  processing.stroke.apply(processing, color);
+  // processing.stroke.apply(processing, color);
+  processing.stroke(15, 15, 15);
 
   if (!sampler) {
     return sampleFakeAudio();
   }
 
   var buffer = new Uint8Array(512);
-  sampler.smoothingTimeConstant = 0.75;
+  sampler.smoothingTimeConstant = .95;
   sampler.getByteFrequencyData(buffer);
 
   var waves_frame_origin = window.innerHeight / 2 + 100;
 
-  for(var line_count = 0; line_count < 5; ++line_count) {
+  for(var line_count = 0; line_count < 1; ++line_count) {
     var previous_x = 0;
     var previous_y = 0 - 50 * line_count;
 
-    for(var i = 0; i < buffer.length; ++i) {
+    for(var i = 50; i < buffer.length; ++i) {
       var x = window.innerWidth * 1.0 / buffer.length * i;
-      var y = buffer[i];
+	  var y = !buffer[i / 1] ? -window.innerHeight : (buffer[Math.floor(i / 1)] - 25 )*5;
       processing.line(previous_x, waves_frame_origin - previous_y - 50 * line_count, x, waves_frame_origin - y - 50 * line_count);
 
       previous_x = x;
