@@ -91,16 +91,16 @@ var theta = 0;
 var float_values = new Uint8Array(window.innerWidth);
 function sampleFakeAudio() {
   prepareToDraw();
-  theta += 0.2;
+  theta += 3;
 
   var waves_frame_origin = window.innerHeight / 2;
 
   var x = theta;
   for (var i = 0; i < float_values.length; ++i) {
-    float_values[i] = 100 + Math.sin(x + i * 0.1) * 100;
+    float_values[i] = 100 + Math.sin((x + i) * 0.1) * 100;
   }
 
-  var previous_x = 0;
+  var previous_x = -1;
   var previous_y = float_values[0] - 50;
 
   for(var j = 0; j < float_values.length; ++j) {
