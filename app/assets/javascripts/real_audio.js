@@ -15,7 +15,7 @@ Anima.sample_microphone = (function() {
 
     var waves_frame_origin = window.innerHeight / 2 + 100;
     var previous_x = 0;
-    var previous_y = 0;
+    var previous_y = buffer[0] * 1.5;
 
     var length = buffer.length;
     for(var i = 0; i < length; ++i) {
