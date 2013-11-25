@@ -11,6 +11,7 @@ window.onload = function() {
     microphone = context.createMediaStreamSource(localMediaStream);
     sampler = context.createAnalyser();
     sampler.fftSize = 1024;
+    sampler.smoothingTimeConstant = 0.95;
     microphone.connect(sampler);
 
     window.clearTimeout(id);
@@ -70,7 +71,6 @@ function prepareToDraw() {
 function sampleAudio() {
   prepareToDraw();
   var buffer = new Uint8Array(128);
-  sampler.smoothingTimeConstant = 0.95;
   sampler.getByteFrequencyData(buffer);
 
   var waves_frame_origin = window.innerHeight / 2 + 100;
