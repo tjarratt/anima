@@ -11,9 +11,9 @@ Anima.sample_fake_audio = (function() {
     Anima.processing.background(0, 0, 0, 0);
     Anima.processing.stroke.apply(Anima.processing, color);
 
-    theta += 3;
+    theta += 1;
     for (var i = 0; i < float_values.length; ++i) {
-      float_values[i] = 100 + Math.sin((theta + i) * 0.1) * 100;
+      float_values[i] = 100 + Math.sin((theta + i * 1.5) * 0.1) * 100;
     }
 
     var previous_x = -1;
@@ -25,12 +25,11 @@ Anima.sample_fake_audio = (function() {
       previous_x = previous_x + j;
       previous_y = float_values[j];
     }
+
+    window.requestAnimationFrame(Anima.sample_fake_audio);
   };
 })();
 
 Anima.enable_fake_audio = function() {
-  (Anima.draw_loop = function repeater() {
-    Anima.sample_fake_audio();
-    setTimeout(Anima.draw_loop, 100);
-  })();
-}
+  window.requestAnimationFrame(Anima.sample_fake_audio);
+};

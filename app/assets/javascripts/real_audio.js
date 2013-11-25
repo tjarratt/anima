@@ -29,6 +29,8 @@ Anima.sample_microphone = (function() {
       previous_x = x;
       previous_y = y;
     }
+
+    window.requestAnimationFrame(Anima.sample_microphone);
   };
 })();
 
@@ -40,10 +42,7 @@ Anima.enable_real_audio = function(context, media_stream) {
   var microphone = context.createMediaStreamSource(media_stream);
   microphone.connect(Anima.sampler);
 
-  (Anima.draw_loop = function repeater() {
-    Anima.sample_microphone();
-    setTimeout(Anima.draw_loop, 15);
-  })();
+  window.requestAnimationFrame(Anima.sample_microphone);
 };
 
 Math.average = function(array) {
