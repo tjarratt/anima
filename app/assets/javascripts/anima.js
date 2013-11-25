@@ -1,8 +1,7 @@
 // todo : http://webaudiodemos.appspot.com/input/index.html
 
-var microphone, sampler;
+var microphone, sampler, processing;
 var context = new window.webkitAudioContext();
-var processing;
 
 window.onload = function() {
   var repeater, id;
@@ -60,18 +59,24 @@ function strokeColorForHour(hour) {
   }
 }
 
-function prepareToDraw() {
-  var date = last_date;
-  var hour = date.getHours();
-  var color = strokeColorForHour(hour);
-  processing.background(0, 0, 0, 0);
-  processing.stroke.apply(processing, color);
+
+function average(array) {
+  var sum = 0;
+  var length = array.length;
+  for(var i = 0; i < length; ++i) { sum += array[i]; }
+  return Math.round(sum / length * 100) / 100;
 }
 
+var buffer = new Uint8Array(512);
 function sampleAudio() {
-  prepareToDraw();
-  var buffer = new Uint8Array(128);
   sampler.getByteFrequencyData(buffer);
+
+  var avg = average(buffer);
+  var color = strokeColorForHour(last_date.getHours());
+  color.push(avg / 75 * 255); // alpha
+
+  processing.background(0, 0, 0, 0);
+  processing.stroke.apply(processing, color);
 
   var waves_frame_origin = window.innerHeight / 2 + 100;
   var previous_x = 0;
@@ -90,7 +95,8 @@ function sampleAudio() {
 var theta = 0;
 var float_values = new Uint8Array(window.innerWidth);
 function sampleFakeAudio() {
-  prepareToDraw();
+  processing.background(0, 0, 0, 0);
+  processing.stroke.apply(processing, strokeColorForHour(last_date.getHours()));
   theta += 3;
 
   var waves_frame_origin = window.innerHeight / 2;
