@@ -26,6 +26,7 @@ Anima.sample_fake_audio = (function() {
       previous_y = float_values[j];
     }
 
+    TWEEN.update();
     window.requestAnimationFrame(Anima.sample_fake_audio);
   };
 })();

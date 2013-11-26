@@ -30,6 +30,7 @@ Anima.sample_microphone = (function() {
       previous_y = y;
     }
 
+    TWEEN.update();
     window.requestAnimationFrame(Anima.sample_microphone);
   };
 })();

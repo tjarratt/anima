@@ -16,6 +16,6 @@ window.onload = function() {
 
   (function daytimeRepeater() {
     Anima.update_background();
-    setTimeout(daytimeRepeater, 1000);
+    setTimeout(daytimeRepeater, 5000);
   })();
 };
