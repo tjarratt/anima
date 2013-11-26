@@ -1,7 +1,7 @@
 var Anima = Anima || {};
 
 Anima.update_background = (function() {
-  var from_point, to_point;
+  var from_point, to_point, bznz;
   var can_haz_serious_business = true;
 
   return function() {
@@ -16,25 +16,23 @@ Anima.update_background = (function() {
     $('#topGradient').css('opacity', 1 - percentage);
     $('#bottomGradient').addClass('hour-' + next_hour);
 
-    if (can_haz_serious_business && date.getHours() == 17 && date.getMinutes() >= 55) {
+    var early_enough = (date.getHours() == 17 && date.getMinutes() >= 55) || (date.getHours() == 18 && date.getMinutes() <= 30);
+    var too_late = date.getHours() == 18 && date.getMinutes() >= 30;
+
+    if (can_haz_serious_business && early_enough) {
       from_point = {x: -280};
       to_point = {x: -20};
       can_haz_serious_business = false;
 
-      var bznz = document.getElementById('srsbznz');
-      var tween = new TWEEN.Tween(from_point)
-        .to(to_point, 3000)
-        .easing(TWEEN.Easing.Elastic.InOut)
-        .onUpdate(function() {
-          bznz.setAttribute('style', 'bottom:' + this.x + 'px');
-        }).start();
+      bznz = bznz || document.getElementById('srsbznz');
     }
-    else if (date.getHours() == 18 && date.getMinutes() >= 30) {
+    else if (too_late) {
       to_point = {x: -280};
       from_point = {x: -20};
-      can_haz_serious_business = false;
+      can_haz_serious_business = true;
+    }
 
-      var bznz = document.getElementById('srsbznz');
+    if (from_point && to_point) {
       var tween = new TWEEN.Tween(from_point)
         .to(to_point, 3000)
         .easing(TWEEN.Easing.Elastic.InOut)
