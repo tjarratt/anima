@@ -13,7 +13,7 @@ Anima.sample_fake_audio = (function() {
 
     theta += 1;
     for (var i = 0; i < float_values.length; ++i) {
-      float_values[i] = 100 + Math.sin((theta + i * 1.5) * 0.1) * 100;
+      float_values[i] = 100 + Math.sin((theta + i * 33) * 0.1) * 100;
     }
 
     var previous_x = -1;
