@@ -19,3 +19,9 @@ window.onload = function() {
     setTimeout(daytimeRepeater, 5000);
   })();
 };
+
+window.onresize = function() {
+  if (!Anima.processing) { return; }
+
+  Anima.processing.size(window.innerWidth, window.innerHeight);
+};
