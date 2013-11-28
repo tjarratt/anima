@@ -37,6 +37,7 @@ Anima.update_background = (function() {
         .to(to_point, 3000)
         .easing(TWEEN.Easing.Elastic.InOut)
         .onUpdate(function() {
+          if (!bznz) { return; }
           bznz.setAttribute('style', 'bottom:' + this.x + 'px');
         }).start();
     }
