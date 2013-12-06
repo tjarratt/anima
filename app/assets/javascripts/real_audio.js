@@ -14,10 +14,11 @@ var spectrumBuffer = (function() {
   }
 
   spectrumBuffer.sampleFromBuffer = function sampleFromBuffer(buffer) {
+    var groupedAverages = groupedAveragesFromBuffer(buffer, yDivisions);
     var momentSpectrum = new Array(yDivisions);
+
     for (var i = 0; i < yDivisions; i++) {
-      var stepSize = Math.floor(buffer.length/xDivisions);
-      momentSpectrum[i] = buffer[i * stepSize];
+      momentSpectrum[i] = groupedAverages[i];
     }
     spectrumBuffer.shift();
     spectrumBuffer.push( momentSpectrum );
@@ -40,6 +41,16 @@ var spectrumBuffer = (function() {
 
   return spectrumBuffer;
 }) ();
+
+function groupedAveragesFromBuffer(buffer, numGroups) {
+  var averages = [];
+  var groupSize = Math.ceil(buffer.length / numGroups);
+  for (var i = 0; i < numGroups; i++) {
+    var group = buffer.subarray(groupSize * i, groupSize * (i + 1));
+    averages[i] = Math.average(group);
+  }
+  return averages;
+}
 
 var historyBuffer = (function() {
   var historyBuffer = new Array(1024);
