@@ -43,6 +43,8 @@ var spectrumBuffer = (function() {
 
 var historyBuffer = (function() {
   var historyBuffer = new Array(1024);
+  var strokeOptions = [];
+
   for (var i = 0; i < historyBuffer.length; ++i) {
     historyBuffer[i] = 0;
   }
@@ -57,6 +59,10 @@ var historyBuffer = (function() {
     historyBuffer.push(moment);
   };
 
+  historyBuffer.setStroke = function setStroke(options) {
+    strokeOptions = options;
+  };
+
   historyBuffer.draw = function draw(processing) {
     var waves_frame_origin = window.innerHeight / 2 + centerOffset;
     var x, y;
@@ -64,11 +70,12 @@ var historyBuffer = (function() {
     var previous_y = historyBuffer[0];
     var length = historyBuffer.length;
 
+    processing.stroke.apply(processing, strokeOptions);
+
     for(i = 0; i < length; ++i) {
       x = window.innerWidth * i / length;
       y = historyBuffer[i];
 
-      Anima.processing.stroke(255);
       // TODO : what if we could just pass this entire array to processing? should be more efficient, nay?
       Anima.processing.line(previous_x, waves_frame_origin - previous_y - centerOffset/2,
                             x, waves_frame_origin - y - centerOffset/2
@@ -93,15 +100,15 @@ Anima.sample_microphone = (function() {
     Anima.sampler.getByteFrequencyData(buffer);
 
     var avg = Math.average(buffer);
-    var color = Anima.color_for_hour();
-    color.push(avg / 75 * 255); // alpha
+    var strokeOptions = Anima.color_for_hour();
+    strokeOptions.push(avg / 75 * 200 + 55); // alpha
 
     Anima.processing.background(0, 0, 0, 0);
-    Anima.processing.stroke.apply(Anima.processing, color);
 
     spectrumBuffer.sampleFromBuffer(buffer);
     spectrumBuffer.draw(Anima.processing);
 
+    historyBuffer.setStroke(strokeOptions);
     historyBuffer.sampleFromBuffer(buffer);
     historyBuffer.draw(Anima.processing);
 
