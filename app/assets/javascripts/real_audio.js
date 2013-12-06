@@ -1,6 +1,45 @@
 var Anima = Anima || {};
 
 var centerOffset = 0;
+var spectrumBuffer = (function() {
+  var xDivisions = 30;
+  var yDivisions = 25;
+
+  var matrix = new Array(xDivisions);
+  for (var i = 0; i < xDivisions; ++i) {
+    matrix[i] = [];
+    for (var j = 0; j < yDivisions; ++j) {
+      matrix[i][j] = 0;
+    }
+  }
+
+  matrix.sampleFromBuffer = function sampleFromBuffer(buffer) {
+    var momentSpectrum = new Array(yDivisions);
+    for (var i = 0; i < yDivisions; i++) {
+      var stepSize = Math.floor(buffer.length/xDivisions);
+      momentSpectrum[i] = buffer[i * stepSize];
+    }
+    matrix.shift();
+    matrix.push( momentSpectrum );
+  };
+
+  matrix.draw = function draw(processing) {
+    var width = window.innerWidth / xDivisions;
+    var height = window.innerHeight / 2 / yDivisions;
+    for(i = 0; i < xDivisions; ++i) {
+      for(j = 0; j < yDivisions; ++j) {
+        var x = width * i;
+        var y = height * j;
+        processing.fill(255, matrix[i][j]);
+        processing.stroke(0,0);
+        processing.rect(x, y, width, height);
+        processing.rect(x, window.innerHeight - y - height, width, height);
+      }
+    }
+  };
+
+  return matrix;
+}) ();
 
 Anima.sample_microphone = (function() {
   var buffer = new Uint8Array(512);
@@ -8,47 +47,7 @@ Anima.sample_microphone = (function() {
   for (var i = 0; i < historyBuffer.length; ++i) {
     historyBuffer[i] = 0;
   }
-
-  var spectrumNumChannels = 25;
-  var spectrumNumHistory = 30;
-  var spectrumBuffer = buildMatrix(spectrumNumHistory, spectrumNumChannels);
-
-  function buildMatrix(width, height) {
-    var matrix = new Array(width);
-    for (var i = 0; i < width; ++i) {
-      matrix[i] = [];
-      for (var j = 0; j < height; ++j) {
-        matrix[i][j] = 0;
-      }
-    }
-    return matrix;
-  }
-
-  function drawSpectrum(xDivision, yDivision, spectrumBuffer) {
-    var width = window.innerWidth / xDivision;
-    var height = window.innerHeight / 2 / yDivision;
-    for(i = 0; i < xDivision; ++i) {
-      for(j = 0; j < yDivision; ++j) {
-        var x = width * i;
-        var y = height * j;
-        Anima.processing.fill(255, spectrumBuffer[i][j]);
-        Anima.processing.stroke(0,0);
-        Anima.processing.rect(
-          x,
-          y,
-          width,
-          height
-        );
-        Anima.processing.rect(
-          x,
-          window.innerHeight - y - height,
-          width,
-          height
-        );
-      }
-    }
-  }
-
+  
   return function sampleAudio() {
     Anima.sampler.getByteFrequencyData(buffer);
 
@@ -67,21 +66,14 @@ Anima.sample_microphone = (function() {
     historyBuffer.shift();
     historyBuffer.push(moment);
 
-    var momentSpectrum = new Array(spectrumNumChannels);
-    for (var i = 0; i < spectrumNumChannels; i++) {
-      var stepSize = Math.floor(length/spectrumNumHistory);
-      momentSpectrum[i] = buffer[i * stepSize];
-    }
-    spectrumBuffer.shift();
-    spectrumBuffer.push( momentSpectrum );
-
     var waves_frame_origin = window.innerHeight / 2 + centerOffset;
     var x, y;
     var previous_x = 0;
     var previous_y = historyBuffer[0];
     length = historyBuffer.length;
 
-    drawSpectrum(spectrumNumHistory, spectrumNumChannels, spectrumBuffer);
+    spectrumBuffer.sampleFromBuffer(buffer);
+    spectrumBuffer.draw(Anima.processing);
 
     for(i = 0; i < length; ++i) {
       x = window.innerWidth * i / length;
