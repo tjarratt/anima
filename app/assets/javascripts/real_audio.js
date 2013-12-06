@@ -123,11 +123,11 @@ Anima.sample_microphone = (function() {
 
     Anima.processing.background(0, 0, 0, 0);
 
-    spectrumBuffer.setStrokeColor(strokeColor);
+    spectrumBuffer.setStrokeColor([strokeColor]);
     spectrumBuffer.sampleFromBuffer(buffer);
     spectrumBuffer.draw(Anima.processing);
 
-    historyBuffer.setStroke(strokeColor.concat([avg / 75 * 200 + 55])); //alpha
+    historyBuffer.setStroke([strokeColor, avg / 75 * 200 + 55]); //alpha
     historyBuffer.sampleFromBuffer(buffer);
     historyBuffer.draw(Anima.processing);
 

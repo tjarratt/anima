@@ -9,7 +9,7 @@ Anima.sample_fake_audio = (function() {
     var color = Anima.color_for_hour();
 
     Anima.processing.background(0, 0, 0, 0);
-    Anima.processing.stroke.apply(Anima.processing, color);
+    Anima.processing.stroke.apply(Anima.processing, [color]);
 
     theta += 1;
     for (var i = 0; i < float_values.length; ++i) {
