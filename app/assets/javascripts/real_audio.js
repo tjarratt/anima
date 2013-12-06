@@ -4,6 +4,7 @@ var centerOffset = 0;
 var spectrumBuffer = (function() {
   var xDivisions = 30;
   var yDivisions = 25;
+  var strokeColor = [255,255,255];
 
   var spectrumBuffer = new Array(xDivisions);
   for (var i = 0; i < xDivisions; ++i) {
@@ -24,6 +25,10 @@ var spectrumBuffer = (function() {
     spectrumBuffer.push( momentSpectrum );
   };
 
+  spectrumBuffer.setStrokeColor = function setStrokeOpacity(color) {
+    strokeColor = color;
+  };
+
   spectrumBuffer.draw = function draw(processing) {
     var width = window.innerWidth / xDivisions;
     var height = window.innerHeight / 2 / yDivisions;
@@ -32,7 +37,10 @@ var spectrumBuffer = (function() {
         var x = width * i;
         var y = height * j;
         processing.fill(255, spectrumBuffer[i][j]);
-        processing.stroke(255, spectrumBuffer[i][j]);
+        var opacity = spectrumBuffer[i][j];
+
+        processing.stroke.apply(processing, strokeColor.concat(opacity));
+
         processing.rect(x, y, width, height);
         processing.rect(x, window.innerHeight - y - height, width, height);
       }
@@ -111,15 +119,15 @@ Anima.sample_microphone = (function() {
     Anima.sampler.getByteFrequencyData(buffer);
 
     var avg = Math.average(buffer);
-    var strokeOptions = Anima.color_for_hour();
-    strokeOptions.push(avg / 75 * 200 + 55); // alpha
+    var strokeColor = Anima.color_for_hour();
 
     Anima.processing.background(0, 0, 0, 0);
 
+    spectrumBuffer.setStrokeColor(strokeColor);
     spectrumBuffer.sampleFromBuffer(buffer);
     spectrumBuffer.draw(Anima.processing);
 
-    historyBuffer.setStroke(strokeOptions);
+    historyBuffer.setStroke(strokeColor.concat([avg / 75 * 200 + 55])); //alpha
     historyBuffer.sampleFromBuffer(buffer);
     historyBuffer.draw(Anima.processing);
 
