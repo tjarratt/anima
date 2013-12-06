@@ -31,7 +31,7 @@ var spectrumBuffer = (function() {
         var x = width * i;
         var y = height * j;
         processing.fill(255, matrix[i][j]);
-        processing.stroke(0,0);
+        // processing.stroke(0,0);
         processing.rect(x, y, width, height);
         processing.rect(x, window.innerHeight - y - height, width, height);
       }
@@ -41,23 +41,13 @@ var spectrumBuffer = (function() {
   return matrix;
 }) ();
 
-Anima.sample_microphone = (function() {
-  var buffer = new Uint8Array(512);
+var historyBuffer = (function() {
   var historyBuffer = new Array(1024);
   for (var i = 0; i < historyBuffer.length; ++i) {
     historyBuffer[i] = 0;
   }
-  
-  return function sampleAudio() {
-    Anima.sampler.getByteFrequencyData(buffer);
 
-    var avg = Math.average(buffer);
-    var color = Anima.color_for_hour();
-    color.push(avg / 75 * 255); // alpha
-
-    Anima.processing.background(0, 0, 0, 0);
-    Anima.processing.stroke.apply(Anima.processing, color);
-
+  historyBuffer.sampleFromBuffer = function sampleFromBuffer(buffer) {
     var sum = 0;
     var length = buffer.length;
     for(var i = 0; i < length; ++i) { sum += buffer[i]; }
@@ -65,15 +55,14 @@ Anima.sample_microphone = (function() {
     var moment = sum / (255 * buffer.length) * 500;
     historyBuffer.shift();
     historyBuffer.push(moment);
+  };
 
+  historyBuffer.draw = function draw(processing) {
     var waves_frame_origin = window.innerHeight / 2 + centerOffset;
     var x, y;
     var previous_x = 0;
     var previous_y = historyBuffer[0];
-    length = historyBuffer.length;
-
-    spectrumBuffer.sampleFromBuffer(buffer);
-    spectrumBuffer.draw(Anima.processing);
+    var length = historyBuffer.length;
 
     for(i = 0; i < length; ++i) {
       x = window.innerWidth * i / length;
@@ -92,6 +81,29 @@ Anima.sample_microphone = (function() {
       previous_x = x;
       previous_y = y;
     }
+  };
+
+  return historyBuffer;
+}) ();
+
+Anima.sample_microphone = (function() {
+  var buffer = new Uint8Array(512);
+  
+  return function sampleAudio() {
+    Anima.sampler.getByteFrequencyData(buffer);
+
+    var avg = Math.average(buffer);
+    var color = Anima.color_for_hour();
+    color.push(avg / 75 * 255); // alpha
+
+    Anima.processing.background(0, 0, 0, 0);
+    Anima.processing.stroke.apply(Anima.processing, color);
+
+    spectrumBuffer.sampleFromBuffer(buffer);
+    spectrumBuffer.draw(Anima.processing);
+
+    historyBuffer.sampleFromBuffer(buffer);
+    historyBuffer.draw(Anima.processing);
 
     TWEEN.update();
     window.requestAnimationFrame(Anima.sample_microphone);
