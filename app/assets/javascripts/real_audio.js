@@ -5,6 +5,7 @@ var spectrumBuffer = (function() {
   var xDivisions = 40;
   var yDivisions = 25;
   var strokeColor = [255,255,255];
+  var fillColor = [255,255,255];
 
   var spectrumBuffer = new Array(xDivisions);
   for (var i = 0; i < xDivisions; ++i) {
@@ -36,9 +37,10 @@ var spectrumBuffer = (function() {
       for(j = 0; j < yDivisions; ++j) {
         var x = width * i;
         var y = height * j;
-        processing.fill(255, spectrumBuffer[i][j]);
+
         var opacity = spectrumBuffer[i][j];
 
+        processing.fill.apply(processing, fillColor.concat(opacity));
         processing.stroke.apply(processing, strokeColor.concat(opacity));
 
         processing.rect(x, y, width, height);
