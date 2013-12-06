@@ -2,7 +2,7 @@ var Anima = Anima || {};
 
 var centerOffset = 0;
 var spectrumBuffer = (function() {
-  var xDivisions = 30;
+  var xDivisions = 40;
   var yDivisions = 25;
   var strokeColor = [255,255,255];
 
