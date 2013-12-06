@@ -64,7 +64,8 @@ function groupedAveragesFromBuffer(buffer, numGroups) {
 
 var historyBuffer = (function() {
   var historyBuffer = new Array(1024);
-  var strokeOptions = [];
+  var strokeColor = [255,255,255];
+  var strokeOpacity = 255;
 
   for (var i = 0; i < historyBuffer.length; ++i) {
     historyBuffer[i] = 0;
@@ -80,8 +81,12 @@ var historyBuffer = (function() {
     historyBuffer.push(moment);
   };
 
-  historyBuffer.setStroke = function setStroke(options) {
-    strokeOptions = options;
+  historyBuffer.setStrokeColor = function setStrokeColor(color) {
+    strokeColor = color;
+  };
+
+  historyBuffer.setStrokeOpacity = function setStrokeOpacity(opacity) {
+    strokeOpacity = opacity;
   };
 
   historyBuffer.draw = function draw(processing) {
@@ -91,7 +96,7 @@ var historyBuffer = (function() {
     var previous_y = historyBuffer[0];
     var length = historyBuffer.length;
 
-    processing.stroke.apply(processing, strokeOptions);
+    processing.stroke.apply(processing, strokeColor.concat(strokeOpacity));
 
     for(i = 0; i < length; ++i) {
       x = window.innerWidth * i / length;
@@ -129,7 +134,8 @@ Anima.sample_microphone = (function() {
     spectrumBuffer.sampleFromBuffer(buffer);
     spectrumBuffer.draw(Anima.processing);
 
-    historyBuffer.setStroke([strokeColor, avg / 75 * 200 + 55]); //alpha
+    historyBuffer.setStrokeColor([strokeColor]); // gross
+    historyBuffer.setStrokeOpacity(avg / 75 * 200 + 55);
     historyBuffer.sampleFromBuffer(buffer);
     historyBuffer.draw(Anima.processing);
 
