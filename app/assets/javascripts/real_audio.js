@@ -5,40 +5,40 @@ var spectrumBuffer = (function() {
   var xDivisions = 30;
   var yDivisions = 25;
 
-  var matrix = new Array(xDivisions);
+  var spectrumBuffer = new Array(xDivisions);
   for (var i = 0; i < xDivisions; ++i) {
-    matrix[i] = [];
+    spectrumBuffer[i] = [];
     for (var j = 0; j < yDivisions; ++j) {
-      matrix[i][j] = 0;
+      spectrumBuffer[i][j] = 0;
     }
   }
 
-  matrix.sampleFromBuffer = function sampleFromBuffer(buffer) {
+  spectrumBuffer.sampleFromBuffer = function sampleFromBuffer(buffer) {
     var momentSpectrum = new Array(yDivisions);
     for (var i = 0; i < yDivisions; i++) {
       var stepSize = Math.floor(buffer.length/xDivisions);
       momentSpectrum[i] = buffer[i * stepSize];
     }
-    matrix.shift();
-    matrix.push( momentSpectrum );
+    spectrumBuffer.shift();
+    spectrumBuffer.push( momentSpectrum );
   };
 
-  matrix.draw = function draw(processing) {
+  spectrumBuffer.draw = function draw(processing) {
     var width = window.innerWidth / xDivisions;
     var height = window.innerHeight / 2 / yDivisions;
     for(i = 0; i < xDivisions; ++i) {
       for(j = 0; j < yDivisions; ++j) {
         var x = width * i;
         var y = height * j;
-        processing.fill(255, matrix[i][j]);
-        // processing.stroke(0,0);
+        processing.fill(255, spectrumBuffer[i][j]);
+        processing.stroke(255, spectrumBuffer[i][j]);
         processing.rect(x, y, width, height);
         processing.rect(x, window.innerHeight - y - height, width, height);
       }
     }
   };
 
-  return matrix;
+  return spectrumBuffer;
 }) ();
 
 var historyBuffer = (function() {
