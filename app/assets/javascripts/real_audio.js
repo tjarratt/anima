@@ -18,28 +18,35 @@ Anima.sample_microphone = (function() {
     Anima.processing.stroke.apply(Anima.processing, color);
 
     var sum = 0;
-    var length = buffer.length;
-    for(var i = 0; i < length; ++i) { sum += buffer[i]; }
+    var bufferLength = buffer.length;
+    for(var i = 0; i < bufferLength; ++i) { sum += buffer[i]; }
 
-    var moment = sum / (255 * buffer.length) * 500;
+    var moment = sum / (255 * bufferLength) * 500;
     historyBuffer.shift();
     historyBuffer.push(moment);
-
-    var x, y, waves_frame_origin = window.innerHeight / 2 + 100;
-    length = historyBuffer.length;
 
     Anima.processing.fill.apply(null, color);
     Anima.processing.beginShape();
 
-    for(i = 0; i < length; ++i) {
-      x = window.innerWidth * i / length;
-      y = historyBuffer[i];
+    var x, y,
+        previous_x = 0,
+        previous_y = buffer[0] * 1.5,
+        waves_frame_origin = window.innerHeight / 2;
 
-      Anima.processing.vertex(x, waves_frame_origin - y - 50);
+    var historyLength = historyBuffer.length;
+    for(i = 0; i < historyLength; ++i) {
+      x = window.innerWidth * i / bufferLength;
+      y = (buffer[i] === undefined) ? 0 : buffer[i] * 1.5;
+
+      Anima.processing.vertex(window.innerWidth * i / historyLength, waves_frame_origin - historyBuffer[i]);
+      Anima.processing.line(previous_x, waves_frame_origin + previous_y,
+                            x, waves_frame_origin + y);
+
+      previous_x = x, previous_y = y;
     }
 
-    Anima.processing.vertex(x, waves_frame_origin - 50);
-    Anima.processing.vertex(0, waves_frame_origin - 50);
+    Anima.processing.vertex(x, waves_frame_origin);
+    Anima.processing.vertex(0, waves_frame_origin);
     Anima.processing.endShape();
 
     TWEEN.update();
