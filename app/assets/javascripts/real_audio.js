@@ -27,22 +27,24 @@ Anima.sample_microphone = (function() {
 
     var waves_frame_origin = window.innerHeight / 2 + 100;
     var x, y;
-    var previous_x = 0;
-    var previous_y = historyBuffer[0];
+    var first_x = 0;
+    var first_y = historyBuffer[0];
+    console.log(first_x, first_y);
     length = historyBuffer.length;
+
+    Anima.processing.fill.apply(null, color);
+    Anima.processing.beginShape();
 
     for(i = 0; i < length; ++i) {
       x = window.innerWidth * i / length;
       y = historyBuffer[i];
 
-      // TODO : what if we could just pass this entire array to processing? should be more efficient, nay?
-      Anima.processing.line(previous_x, waves_frame_origin - previous_y - 50,
-                            x, waves_frame_origin - y - 50
-      );
-
-      previous_x = x;
-      previous_y = y;
+      Anima.processing.vertex(x, waves_frame_origin - y - 50);
     }
+
+    Anima.processing.vertex(x, waves_frame_origin - 50);
+    Anima.processing.vertex(first_x, waves_frame_origin - 50);
+    Anima.processing.endShape();
 
     TWEEN.update();
     window.requestAnimationFrame(Anima.sample_microphone);
