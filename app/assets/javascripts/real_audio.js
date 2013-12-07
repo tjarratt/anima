@@ -25,11 +25,7 @@ Anima.sample_microphone = (function() {
     historyBuffer.shift();
     historyBuffer.push(moment);
 
-    var waves_frame_origin = window.innerHeight / 2 + 100;
-    var x, y;
-    var first_x = 0;
-    var first_y = historyBuffer[0];
-    console.log(first_x, first_y);
+    var x, y, waves_frame_origin = window.innerHeight / 2 + 100;
     length = historyBuffer.length;
 
     Anima.processing.fill.apply(null, color);
@@ -43,7 +39,7 @@ Anima.sample_microphone = (function() {
     }
 
     Anima.processing.vertex(x, waves_frame_origin - 50);
-    Anima.processing.vertex(first_x, waves_frame_origin - 50);
+    Anima.processing.vertex(0, waves_frame_origin - 50);
     Anima.processing.endShape();
 
     TWEEN.update();
