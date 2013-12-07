@@ -2,7 +2,7 @@ var Anima = Anima || {};
 
 Anima.sample_microphone = (function() {
   var buffer = new Uint8Array(512);
-  var historyBuffer = new Array(1024);
+  var historyBuffer = new Array(4096);
   for (var i = 0; i < historyBuffer.length; ++i) {
     historyBuffer[i] = 0;
   }
