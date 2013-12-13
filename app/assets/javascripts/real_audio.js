@@ -1,6 +1,5 @@
 var Anima = Anima || {};
 
-var centerOffset = 0;
 var spectrumBuffer = (function() {
   var xDivisions = 40;
   var yDivisions = 25;
@@ -90,30 +89,27 @@ var historyBuffer = (function() {
   };
 
   historyBuffer.draw = function draw(processing) {
-    var waves_frame_origin = window.innerHeight / 2 + centerOffset;
+    var waves_frame_origin = window.innerHeight / 2;
     var x, y;
-    var previous_x = 0;
-    var previous_y = historyBuffer[0];
+    var first_x = 0, first_y = historyBuffer[0];
     var length = historyBuffer.length;
 
     processing.stroke.apply(processing, strokeColor.concat(strokeOpacity));
+    processing.fill.apply(processing, strokeColor.concat(strokeOpacity));
+    processing.beginShape();
 
     for(i = 0; i < length; ++i) {
       x = window.innerWidth * i / length;
       y = historyBuffer[i];
 
-      // TODO : what if we could just pass this entire array to processing? should be more efficient, nay?
-      Anima.processing.line(previous_x, waves_frame_origin - previous_y - centerOffset/2,
-                            x, waves_frame_origin - y - centerOffset/2
-      );
-
-      Anima.processing.line(previous_x, waves_frame_origin + previous_y - centerOffset/2,
-                            x, waves_frame_origin + y - centerOffset/2
-      );
-
-      previous_x = x;
-      previous_y = y;
+      processing.vertex(x, waves_frame_origin - y);
+      processing.vertex(x, waves_frame_origin + y);
     }
+
+      processing.vertex(x, waves_frame_origin - first_y);
+      processing.vertex(first_x, waves_frame_origin);
+      processing.endShape();
+
   };
 
   return historyBuffer;
@@ -121,7 +117,7 @@ var historyBuffer = (function() {
 
 Anima.sample_microphone = (function() {
   var buffer = new Uint8Array(512);
-  
+
   return function sampleAudio() {
     Anima.sampler.getByteFrequencyData(buffer);
 
