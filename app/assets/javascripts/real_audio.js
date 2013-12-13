@@ -62,7 +62,7 @@ function groupedAveragesFromBuffer(buffer, numGroups) {
 }
 
 var historyBuffer = (function() {
-  var historyBuffer = new Array(1024);
+  var historyBuffer = new Array(4096);
   var strokeColor = [255,255,255];
   var strokeOpacity = 255;
 
@@ -103,7 +103,7 @@ var historyBuffer = (function() {
       y = historyBuffer[i];
 
       processing.vertex(x, waves_frame_origin - y);
-      processing.vertex(x, waves_frame_origin + y);
+//      processing.vertex(x, waves_frame_origin + y);
     }
 
       processing.vertex(x, waves_frame_origin - first_y);
