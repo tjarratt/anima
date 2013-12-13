@@ -91,7 +91,6 @@ var historyBuffer = (function() {
   historyBuffer.draw = function draw(processing) {
     var waves_frame_origin = window.innerHeight / 2;
     var x, y;
-    var first_x = 0, first_y = historyBuffer[0];
     var length = historyBuffer.length;
 
     processing.stroke.apply(processing, strokeColor.concat(strokeOpacity));
@@ -103,17 +102,47 @@ var historyBuffer = (function() {
       y = historyBuffer[i];
 
       processing.vertex(x, waves_frame_origin - y);
-//      processing.vertex(x, waves_frame_origin + y);
     }
 
-      processing.vertex(x, waves_frame_origin - first_y);
-      processing.vertex(first_x, waves_frame_origin);
+      processing.vertex(x, waves_frame_origin);
+      processing.vertex(0, waves_frame_origin);
       processing.endShape();
 
   };
 
   return historyBuffer;
 }) ();
+
+var frequencyBuffer = (function() {
+    var frequencyBuffer = [];
+    var strokeColor = [255,255,255];
+    var strokeOpacity = 255;
+
+    return {
+        sampleFromBuffer: function(buffer) {
+            frequencyBuffer = buffer;
+        },
+        setStrokeColor: function(color) {
+            strokeColor = color;
+        },
+        setStrokeOpacity: function(opacity) {
+            strokeOpacity = opacity;
+        },
+        draw: function(processing) {
+            var x, y, waves_from_origin = window.innerHeight / 2;
+
+            processing.beginShape();
+            for (var i = 0; i < frequencyBuffer.length; ++i) {
+               x = window.innerWidth * i / frequencyBuffer.length;
+               y = (frequencyBuffer[i] === undefined) ? 0 : frequencyBuffer[i] * 1.5;
+               processing.vertex(x, waves_from_origin + y);
+            }
+
+            processing.vertex(0, waves_from_origin);
+            processing.endShape();
+        }
+    };
+})();
 
 Anima.sample_microphone = (function() {
   var buffer = new Uint8Array(512);
@@ -134,6 +163,11 @@ Anima.sample_microphone = (function() {
     historyBuffer.setStrokeOpacity(avg / 75 * 200 + 55);
     historyBuffer.sampleFromBuffer(buffer);
     historyBuffer.draw(Anima.processing);
+
+    frequencyBuffer.sampleFromBuffer(buffer);
+    frequencyBuffer.setStrokeColor(strokeColor);
+    frequencyBuffer.setStrokeOpacity(avg / 75 * 200 + 55);
+    frequencyBuffer.draw(Anima.processing);
 
     TWEEN.update();
     window.requestAnimationFrame(Anima.sample_microphone);
