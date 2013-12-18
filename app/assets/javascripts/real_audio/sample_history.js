@@ -28,16 +28,17 @@ Anima.historyBuffer = (function() {
   };
 
   historyBuffer.draw = function draw(processing) {
-    var waves_frame_origin = window.innerHeight / 2;
     var x, y;
+    var waves_frame_origin = window.innerHeight / 2;
     var length = historyBuffer.length;
+    var window_width = window.innerWidth - 50;
 
     processing.stroke.apply(processing, strokeColor.concat(strokeOpacity));
     processing.fill.apply(processing, strokeColor.concat(strokeOpacity));
     processing.beginShape();
 
     for(i = 0; i < length; ++i) {
-      x = window.innerWidth * i / length;
+      x = window_width * i / length;
       y = historyBuffer[i];
 
       processing.vertex(x, waves_frame_origin - y);

@@ -16,16 +16,18 @@ Anima.frequencyBuffer = (function() {
       strokeOpacity = opacity;
     },
     draw: function(processing) {
+      var window_width = window.innerWidth - 50;
       var x, y, waves_origin = window.innerHeight / 2;
 
       processing.beginShape();
       for (var i = 0; i < frequencyBuffer.length; ++i) {
-        x = window.innerWidth * i / frequencyBuffer.length;
+        x = window_width * i / frequencyBuffer.length;
         y = (frequencyBuffer[i] === undefined) ? 0 : frequencyBuffer[i] * 1.5;
         processing.vertex(x, waves_origin + y);
       }
 
       processing.vertex(x, waves_origin);
+      processing.vertex(window.innerWidth, waves_origin);
       processing.vertex(0, waves_origin);
       processing.endShape();
     }
