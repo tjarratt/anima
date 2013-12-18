@@ -46,4 +46,22 @@ Anima.enable_real_audio = function(context, media_stream) {
   microphone.connect(Anima.sampler);
 
   window.requestAnimationFrame(Anima.sample_microphone);
+  new Processing(document.getElementById('labels'), function(p) {
+    Anima.labels = p;
+    Anima.draw_labels();
+  });
+};
+
+Anima.draw_labels = function() {
+  Anima.labels.size(window.innerWidth, window.innerHeight);
+
+  var labelCanvas = document.getElementById('labels');
+  var ctx = labelCanvas.getContext('2d');
+  ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+  ctx.font = "30px arial";
+
+  var y = window.innerHeight / 2 + 55;
+  ctx.fillStyle = Anima.stroke_color_for_hour();
+  ctx.fillText("now", window.innerWidth - 70, y);
+  ctx.fillText("earlier", 25, y);
 };

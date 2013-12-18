@@ -8,7 +8,7 @@ window.onload = function() {
     Anima.enable_real_audio(new window.webkitAudioContext(), localMediaStream);
   });
 
-  new Processing(document.getElementsByTagName('canvas')[0], function(p) {
+  new Processing(document.getElementById('processing'), function(p) {
     p.size(window.innerWidth, window.innerHeight);
     Anima.processing = p;
     Anima.enable_fake_audio();
@@ -16,12 +16,16 @@ window.onload = function() {
 
   (function daytimeRepeater() {
     Anima.update_background();
-    setTimeout(daytimeRepeater, 5000);
+    window.setTimeout(daytimeRepeater, 5000);
   })();
 };
 
 window.onresize = function() {
-  if (!Anima.processing) { return; }
-
-  Anima.processing.size(window.innerWidth, window.innerHeight);
+  if (Anima.processing) {
+    Anima.processing.size(window.innerWidth, window.innerHeight);
+  }
+  if (Anima.labels) {
+    Anima.labels.size(window.innerWidth, window.innerHeight);
+    Anima.draw_labels();
+  }
 };
