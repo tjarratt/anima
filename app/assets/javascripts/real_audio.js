@@ -62,6 +62,8 @@ Anima.draw_labels = function() {
 
   var y = window.innerHeight / 2 + 55;
   ctx.fillStyle = Anima.stroke_color_for_hour();
-  ctx.fillText("now", window.innerWidth - 70, y);
-  ctx.fillText("earlier", 25, y);
+  ctx.textAlign = 'right';
+  ctx.fillText("now", window.innerWidth - 20, y);
+  ctx.textAlign = 'left';
+  ctx.fillText("then", 20, y);
 };
