@@ -1,8 +1,0 @@
----
-applications:
-- name: config/cf.yml
-  memory: 256M
-  instances: 1
-  host: none
-  domain: none
-  path: .
